@@ -3,6 +3,8 @@ package com.luqili.utils.maven_utils;
 import java.io.File;
 import java.io.FileFilter;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.io.FileUtils;
@@ -63,7 +65,7 @@ public class MergeWebMojo extends AbstractMojo {
 	private List<String> suffixExcludes;
 	
 	public void execute() throws MojoExecutionException, MojoFailureException {
-		
+		project.getBuild().getOutputDirectory();
 		File baseDir = project.getBasedir();
 		if(srcProjectFile==null){
 			if(StringUtils.isNotBlank(srcProjectName)){
@@ -100,6 +102,7 @@ public class MergeWebMojo extends AbstractMojo {
 		}else{
 			outProjectFile=baseDir;
 		}
+		final List<String> copyFilePaths = new ArrayList<String>();
 		FileFilter fileFilter = new FileFilter() {
 			public boolean accept(File pathname) {
 				boolean result = true;
@@ -126,6 +129,7 @@ public class MergeWebMojo extends AbstractMojo {
 				}
 				if(result){
 					getLog().info("复制文件或目录:"+pathname.getAbsolutePath());
+					copyFilePaths.add(pathname.getAbsolutePath());
 				}
 				return result;
 			}
@@ -140,6 +144,23 @@ public class MergeWebMojo extends AbstractMojo {
 		}
 		getLog().info("项目来源目录:"+srcProjectFile.getAbsolutePath());
 		getLog().info("项目输出目录:"+outProjectFile.getAbsolutePath());
+		//baseDir
+		File logFile=HandleFileTool.getMergeFileLogsFile(project);
+		try {
+		  if(logFile.exists() && logFile.isFile()){
+		    List<String> olds=FileUtils.readLines(logFile,StandardCharsets.UTF_8);
+		    for(String old:olds){
+		      if(!copyFilePaths.contains(old)){
+		        copyFilePaths.add(old);
+		      }
+		    }
+		  }
+      FileUtils.writeLines(logFile,copyFilePaths);
+      getLog().info("合并记录日志:"+logFile.getAbsolutePath());
+    } catch (IOException e) {
+      getLog().info("日志记录失败:"+e.getMessage());
+    }
+		
 	}
 
 }
