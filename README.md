@@ -1,1 +1,29 @@
-#maven-utils
+# maven-utils
+Maven编译时用到的一些工具插件
+***
+`
+<plugin>
+	<artifactId>maven-utils</artifactId>
+	<groupId>com.luqili.utils</groupId>
+	<version>0.0.1</version>
+	<executions>
+		<execution>
+			<phase>generate-sources</phase>
+			<goals>
+				<goal>merge</goal>
+			</goals>
+		</execution>
+	</executions>
+	<configuration>
+		<outProjectName>web_sum</outProjectName>
+		<suffixExcludes>
+			<suffixExclude>target</suffixExclude>
+			<suffixExclude>.class</suffixExclude>
+			<suffixExclude>.project</suffixExclude>
+			<suffixExclude>.settings</suffixExclude>
+			<suffixExclude>.classpath</suffixExclude>
+		</suffixExcludes>
+	</configuration>
+</plugin>
+`
+***
