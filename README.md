@@ -1,29 +1,44 @@
-# maven-utils
-Maven编译时用到的一些工具插件
+## maven-utils
+####Maven编译项目自定义工具插件工具插件
+###插件说明:
+1.```xml<goal>merge</goal>```
+	进行合并两个项目，默认调用节点generate-sources
+1.```xml<goal>clear-merge</goal>```
+	清理合并文件，默认调用节点pre-clean
 ***
-`
+*使用样例:
+```xml
 <plugin>
 	<artifactId>maven-utils</artifactId>
 	<groupId>com.luqili.utils</groupId>
-	<version>0.0.1</version>
+	<version>0.0.2</version>
 	<executions>
 		<execution>
-			<phase>generate-sources</phase>
+			<id>copy-file</id>
 			<goals>
 				<goal>merge</goal>
 			</goals>
 		</execution>
+		<execution>
+			<id>clear-copy-file</id>
+			<goals>
+				<goal>clear-merge</goal>
+			</goals>
+		</execution>
 	</executions>
 	<configuration>
-		<outProjectName>web_sum</outProjectName>
+		<srcProjectName>weixin-java-common</srcProjectName>
 		<suffixExcludes>
 			<suffixExclude>target</suffixExclude>
 			<suffixExclude>.class</suffixExclude>
 			<suffixExclude>.project</suffixExclude>
 			<suffixExclude>.settings</suffixExclude>
 			<suffixExclude>.classpath</suffixExclude>
+			<suffixExclude>pom.xml</suffixExclude>
+			<suffixExclude>.gradle</suffixExclude>
+			<suffixExclude>test</suffixExclude>
 		</suffixExcludes>
 	</configuration>
 </plugin>
-`
+```
 ***

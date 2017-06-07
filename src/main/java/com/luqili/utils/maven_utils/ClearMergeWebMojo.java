@@ -16,45 +16,57 @@ import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
 
 /**
- * 清理合并的文件
+ * 根据日志清理拷贝到目标的文件
+ * 
  * @author luqili 2017年6月6日 下午10:36:31
- *
  */
-@Mojo(name="clear-merge",defaultPhase=LifecyclePhase.PRE_CLEAN)
+@Mojo(name = "clear-merge", defaultPhase = LifecyclePhase.PRE_CLEAN)
 public class ClearMergeWebMojo extends AbstractMojo {
-  
-  @Parameter(property="project",required=true)
-  private MavenProject project;
-  
-  @Override
-  public void execute() throws MojoExecutionException, MojoFailureException {
-    File logFile = HandleFileTool.getMergeFileLogsFile(project);
-    if(logFile.exists() && logFile.isFile()){
-      try {
-        List<String> fileLogs = FileUtils.readLines(logFile,StandardCharsets.UTF_8);
-        List<File> dirs = new ArrayList<>();
-        //删除文件
-        for(String fileLog:fileLogs){
-          File file = new File(fileLog);
-          if(file.isDirectory()){
-            dirs.add(file);
-          }else{
-            getLog().info("删除历史文件:"+file.getAbsolutePath());
-            file.delete();
-          }
-        }
-        //统一处理文件夹，删除空文件夹
-        for(File file:dirs){
-          if(file.list()==null||file.list().length<1){
-            getLog().info("删除空文件夹:"+file.getAbsolutePath());
-            file.delete();
-          }
-        }
-      } catch (IOException e) {
-        getLog().error("清理文件失败："+e.getMessage());
-      }
-     
-    }
-  }
+
+	@Parameter(property = "project", required = true)
+	private MavenProject project;
+
+	@Override
+	public void execute() throws MojoExecutionException, MojoFailureException {
+		File logFile = HandleFileTool.getMergeFileLogsFile(project);
+		if (logFile.exists() && logFile.isFile()) {
+			try {
+				List<String> fileLogs = FileUtils.readLines(logFile, StandardCharsets.UTF_8);
+				List<File> dirs = new ArrayList<>();
+				// 删除拷贝来的文件
+				for (String fileLog : fileLogs) {
+					File file = new File(fileLog);
+					if(!file.exists()){
+						continue;
+					}
+					if (file.isDirectory()) {
+						dirs.add(file);
+					} else {
+						file.delete();
+						getLog().info("删除拷贝文件:" + file.getAbsolutePath());
+					}
+				}
+				// 统一处理文件夹，删除拷贝来的文件夹(包含文件的文件夹保留)
+				
+				for (File file : dirs) {
+					if(!file.exists()){
+						continue;
+					}
+					boolean canDel=HandleFileTool.isEmptyDirctory(file);
+					if(canDel){
+						getLog().info("删除空文件夹:" + file.getAbsolutePath());
+						FileUtils.deleteQuietly(file);
+					}else{
+						getLog().info("非空文件夹:" + file.getAbsolutePath());
+					}
+				}
+			} catch (IOException e) {
+				getLog().error("清理文件异常：" + e.getMessage());
+			}
+			logFile.delete();
+			getLog().info("删除日志记录:" + logFile.getAbsolutePath());
+			HandleFileTool.clearRootPath(project);
+		}
+	}
 
 }
