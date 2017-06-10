@@ -56,12 +56,15 @@
 			 -->
 			<!-- 过滤文件、文件夹(名称以‘suffixExclude’结尾的),优先级高于suffixIncludes -->
 			<suffixExcludes>
-				<suffixExclude>target</suffixExclude><!-- 不复制 target文件夹及该文件夹下所有的文件 -->
-				<suffixExclude>.class</suffixExclude><!-- 不复制 后缀为.class的文件 -->
+				<!-- 不复制 target文件夹及该文件夹下所有的文件 -->
+				<suffixExclude>target</suffixExclude>
+				<!-- 不复制 后缀为.class的文件 -->
+				<suffixExclude>.class</suffixExclude>
 				<suffixExclude>.project</suffixExclude>
 				<suffixExclude>.settings</suffixExclude>
 				<suffixExclude>.classpath</suffixExclude>
-				<suffixExclude>pom.xml</suffixExclude><!-- 不复制 pom.xml的文件 或 xxxpom.xml -->
+				<!-- 不复制 pom.xml的文件 或 xxxpom.xml -->
+				<suffixExclude>pom.xml</suffixExclude>
 				<suffixExclude>.gradle</suffixExclude>
 				<suffixExclude>test</suffixExclude>
 			</suffixExcludes>
@@ -81,20 +84,28 @@
 				<execution>
 					<id>copy-file</id>
 					<goals>
-						<goal>merge</goal><!-- 调用合并插件 -->
-						<goal>clear-merge</goal><!-- 调用清理插件 -->
+						<!-- 调用合并插件 -->
+						<goal>merge</goal>
+						<!-- 调用清理插件 -->
+						<goal>clear-merge</goal>
 					</goals>
 				</execution>
 			</executions>
 			<configuration>
-				<srcProjectName>weixin-java-common</srcProjectName><!-- 将项目weixin-java-common源文件复制到当前项目 -->
-				<suffixExcludes><!-- 过滤文件、文件夹(名称以‘suffixExclude’结尾的)-->
-					<suffixExclude>target</suffixExclude><!-- 不复制 target文件夹及该文件夹下所有的文件 -->
-					<suffixExclude>.class</suffixExclude><!-- 不复制 后缀为.class的文件 -->
+				<!-- 将项目weixin-java-common源文件复制到当前项目 -->
+				<srcProjectName>weixin-java-common</srcProjectName>
+				<!-- 过滤文件、文件夹(名称以‘suffixExclude’结尾的)-->
+				<suffixExcludes>
+					<!-- 不复制 target文件夹及该文件夹下所有的文件 -->
+					<suffixExclude>target</suffixExclude>
+					<!-- 不复制 后缀为.class的文件 -->
+					<suffixExclude>.class</suffixExclude>
+					<suffixExclude>.log</suffixExclude>
 					<suffixExclude>.project</suffixExclude>
 					<suffixExclude>.settings</suffixExclude>
 					<suffixExclude>.classpath</suffixExclude>
-					<suffixExclude>pom.xml</suffixExclude><!-- 不复制 pom.xml的文件 或 xxxpom.xml -->
+					<!-- 不复制 pom.xml的文件 或 xxxpom.xml -->
+					<suffixExclude>pom.xml</suffixExclude>
 					<suffixExclude>.gradle</suffixExclude>
 					<suffixExclude>test</suffixExclude>
 				</suffixExcludes>
