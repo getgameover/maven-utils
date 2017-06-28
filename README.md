@@ -68,6 +68,8 @@
 				<suffixExclude>.gradle</suffixExclude>
 				<suffixExclude>test</suffixExclude>
 			</suffixExcludes>
+			<!-- 是否验证源文件与目标，true:源文件与目标一致,不进行复制.false:强制复制文件 -->
+			<validFile>true</validFile>
 		</configuration>
 	</plugin>
 </plugins>

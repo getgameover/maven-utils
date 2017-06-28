@@ -71,6 +71,13 @@ public class MergeWebMojo extends AbstractMojo {
 	 */
 	@Parameter(property = "suffixExcludes", required = false)
 	private List<String> suffixExcludes;
+	
+	/**
+	 * 是否验证文件
+	 * <li> 源文件与目标文件一致，不进行替换
+	 */
+	@Parameter(property = "validFile", required = false, defaultValue="true")
+    private Boolean validFile;
 
 	public void execute() throws MojoExecutionException, MojoFailureException {
 		project.getBuild().getOutputDirectory();
@@ -137,8 +144,22 @@ public class MergeWebMojo extends AbstractMojo {
 						}
 					}
 				}
+				//验证文件
+				if(validFile && pathname.isFile()){
+				    File targetFile=getTargetFile(pathname, srcProjectFile, outProjectFile);
+				    try{
+				    	if(FileUtils.contentEquals(pathname, targetFile)){
+				    		result=false;
+				    		getLog().info("文件无变化:" + pathname.getAbsolutePath());
+					    };
+				    }catch (Exception e) {
+					}
+				}
+				
 				if (result) {
-					getLog().info("复制文件或目录:" + pathname.getAbsolutePath());
+					if(pathname.isFile()){
+						getLog().info("复制文件:" + pathname.getAbsolutePath());
+					}
 					String copyFilePath = pathname.getAbsolutePath();
 					copyFilePath = outRootPath + StringUtils.removeStart(copyFilePath, srcRootPath);
 					copyFilePaths.add(copyFilePath);
@@ -173,6 +194,20 @@ public class MergeWebMojo extends AbstractMojo {
 			getLog().info("日志记录失败:" + e.getMessage());
 		}
 
+	}
+	/**
+	 * 根据源文件,获得目标文件
+	 * @param srcFile
+	 * @param srcRootFile
+	 * @param targetRootFile
+	 * @return
+	 */
+	private File getTargetFile(File srcFile,File srcRootFile,File targetRootFile){
+	    String src=srcFile.getAbsolutePath();
+	    String srcRoot=srcRootFile.getAbsolutePath();
+	    String targetRoot=targetRootFile.getAbsolutePath();
+	    String target=targetRoot+StringUtils.removeStart(src, srcRoot);
+	    return new File(target);
 	}
 
 }
