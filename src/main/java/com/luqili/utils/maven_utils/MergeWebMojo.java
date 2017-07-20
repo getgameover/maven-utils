@@ -189,7 +189,7 @@ public class MergeWebMojo extends AbstractMojo {
     }
     getLog().info("项目来源目录:" + srcProjectFile.getAbsolutePath());
     getLog().info("项目输出目录:" + outProjectFile.getAbsolutePath());
-    getLog().info("文件总计:" + copyCount + "个,复制:" + copyCount + "个,过滤:" + filterCount + "个");
+    getLog().info("文件总计:" + fileCount + "个,复制:" + copyCount + "个,过滤:" + filterCount + "个");
     // baseDir
     File logFile = HandleFileTool.getMergeFileLogsFile(project);
     try {
