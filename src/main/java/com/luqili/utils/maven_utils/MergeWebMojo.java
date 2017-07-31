@@ -161,14 +161,14 @@ public class MergeWebMojo extends AbstractMojo {
           }
         }
 
+        String copyFilePath = pathname.getAbsolutePath();
+        copyFilePath = outRootPath + StringUtils.removeStart(copyFilePath, srcRootPath);
+        copyFilePaths.add(copyFilePath);
+        
         if (result) {
           if (pathname.isFile()) {
             getLog().info("复制文件:" + pathname.getAbsolutePath());
           }
-          String copyFilePath = pathname.getAbsolutePath();
-          copyFilePath = outRootPath + StringUtils.removeStart(copyFilePath, srcRootPath);
-          copyFilePaths.add(copyFilePath);
-
         }
         if (pathname.isFile()) {
           if (result) {
